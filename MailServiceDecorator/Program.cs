@@ -10,11 +10,9 @@ var onPremiseMailService  = new OnPremiseMailService();
 
 onPremiseMailService.SendMail("This is another test.");
 
-
 // add behavior
 var statisticsDecorator  = new StatisticsDecorator(cloudMailService);
 statisticsDecorator.SendMail($"This test is via {nameof(StatisticsDecorator)} wrapper.");
-
 
 // add behavior
 var messageDatabaseDecorator  = new MessageDatabaseDecorator(onPremiseMailService);
