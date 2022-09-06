@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace StateBankAccount
@@ -8,9 +9,9 @@ namespace StateBankAccount
     /// <summary>
     /// Concrete State
     /// </summary>
-    public class RegularState : BankAccountState
+    public class GoldState : BankAccountState
     {
-        public RegularState(decimal balance, BankAccount bankAccount)
+        public GoldState(decimal balance, BankAccount bankAccount)
         {
             Balance = balance;
             BankAccount = bankAccount;
@@ -18,13 +19,10 @@ namespace StateBankAccount
 
         public override void Deposit(decimal amount)
         {
-            Console.WriteLine($"In {GetType()}, depositing {amount}");
-            Balance += amount;
-
-            if (Balance >= 1000)
-            {
-                BankAccount.bankAccountState = new GoldState(Balance, BankAccount);
-            }
+            Console.WriteLine($"In {GetType()}, depositing " +
+                $"{amount} + 10% bonus: {amount / 10}"
+                );
+            Balance += amount + (amount / 10);
         }
 
         public override void Withdraw(decimal amount)
@@ -32,7 +30,11 @@ namespace StateBankAccount
             Console.WriteLine($"In {GetType()}, withdrawing {amount} from {Balance}");
             Balance -= amount;
 
-            if (Balance < 0)
+            if (Balance < 1000 && Balance >= 0)
+            {
+                BankAccount.bankAccountState = new RegularState(Balance, BankAccount);
+            }
+            else if (Balance < 0)
             {
                 BankAccount.bankAccountState = new OverdrawnState(Balance, BankAccount);
             }
